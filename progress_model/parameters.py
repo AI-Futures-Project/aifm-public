@@ -349,13 +349,13 @@ class Parameters:
                 self.optimal_ces_grid_size = int(self.optimal_ces_grid_size)
 
             # Apply parallel_penalty transformation to coding_automation_efficiency_slope
-            # Transform: slope_transformed = slope_input ^ (0.5 / parallel_penalty)
+            # Transform: slope_transformed = slope_input * (0.5 / parallel_penalty)
             if np.isfinite(self.parallel_penalty) and self.parallel_penalty != 0:
                 try:
-                    exponent = 0.5 / self.parallel_penalty
+                    factor = 0.5 / self.parallel_penalty
                     original_slope = self.coding_automation_efficiency_slope
-                    self.coding_automation_efficiency_slope = float(np.power(self.coding_automation_efficiency_slope, exponent))
-                    logger.info(f"Transformed coding_automation_efficiency_slope: {original_slope:.6f} ^ ({exponent:.6f}) = {self.coding_automation_efficiency_slope:.6f}")
+                    self.coding_automation_efficiency_slope = float(self.coding_automation_efficiency_slope * factor)
+                    logger.info(f"Transformed coding_automation_efficiency_slope: {original_slope:.6f} * ({factor:.6f}) = {self.coding_automation_efficiency_slope:.6f}")
 
                     if not np.isfinite(self.coding_automation_efficiency_slope) or self.coding_automation_efficiency_slope <= 0:
                         logger.warning(f"Non-finite result after parallel_penalty transformation, reverting to original value: {original_slope}")
